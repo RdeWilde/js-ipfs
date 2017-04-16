@@ -2,6 +2,6 @@
 'use strict'
 
 describe('interop', () => {
-  require('./index')
+  require('./exchange-files')
   require('./repo')
 })

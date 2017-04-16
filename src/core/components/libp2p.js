@@ -22,6 +22,17 @@ module.exports = function libp2p (self) {
 
         self._libp2pNode = new Node(self._peerInfo, self._peerInfoBook, options)
 
+        self._libp2pNode.on('peer:discovery', (peerInfo) => {
+          if (self.isOnline()) {
+            self._peerInfoBook.put(peerInfo)
+            self._libp2pNode.dial(peerInfo, () => {})
+          }
+        })
+
+        self._libp2pNode.on('peer:connect', (peerInfo) => {
+          self._peerInfoBook.put(peerInfo)
+        })
+
         self._libp2pNode.start((err) => {
           if (err) {
             return callback(err)
@@ -29,16 +40,6 @@ module.exports = function libp2p (self) {
 
           self._libp2pNode.peerInfo.multiaddrs.forEach((ma) => {
             console.log('Swarm listening on', ma.toString())
-          })
-
-          self._libp2pNode.on('peer:discovery', (peerInfo) => {
-            if (self.isOnline()) {
-              self._peerInfoBook.put(peerInfo)
-              self._libp2pNode.dial(peerInfo, () => {})
-            }
-          })
-          self._libp2pNode.on('peer:connect', (peerInfo) => {
-            self._peerInfoBook.put(peerInfo)
           })
 
           callback()
