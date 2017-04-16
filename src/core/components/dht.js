@@ -3,7 +3,7 @@
 const promisify = require('promisify-es6')
 const every = require('async/every')
 const each = require('async/each')
-const bsplit = require('buffer-split')
+// const bsplit = require('buffer-split')
 
 module.exports = (self) => {
   return {
@@ -99,7 +99,7 @@ module.exports = (self) => {
         if (options.recursive) {
           // TODO: Implement recursive providing
         } else {
-          each(cids, (cid, cb) => {
+          each(keys, (cid, cb) => {
             self.libp2p.dht.provide(cid, cb)
           }, callback)
         }
